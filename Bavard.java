@@ -33,13 +33,32 @@ public class Bavard implements MessageListener {
     }
     public void afficheAmis(){
         for (Bavard bavard : this.getListeAmis()){
-            System.out.println(bavard.getNom());
+            System.out.println("   - " + bavard.getNom());
         }
     }
 
+    public void envoyerMessage(String contenu, int bienveillance) {
+        ArrayList<String> auteur;
+        auteur.add(this.getNom());
+        MessageEvent message = new MessageEvent(this, contenu, bienveillance, auteur);
+        System.out.println("Message envoyé par " + nom + " (avec une bienveillance de " + bienveillance + ") : " + message.getContenu());
+        for (Bavard b : this.getListeAmis()) {
+            b.messageRecu(message);
+        }
+    }    
+
+    @Override
     public void messageRecu(MessageEvent e) {
-        System.out.println("Hello World !");
+        // System.out.println("Message recu par " + nom + " : " + e.getContenu());
+        System.out.println(this.getNom() + " : " + e.getDernierAuteur() + " vous a envoyé un message");
     }
-    
+
+    // public void retransmettreMessage(MessageEvent message) {
+    //     MessageEvent message.getContenu() = ;
+    //     System.out.println("Message envoyé par " + nom + " (avec une bienveillance de " + bienveillance + ") : " + message.getContenu());
+    //     for (Bavard b : this.getListeAmis()) {
+    //         b.messageRecu(message);
+    //     }
+    // }
 
 }
