@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Bavard {
+public class Bavard implements MessageListener {
 
     private String nom;
     private String perso;
@@ -36,5 +36,10 @@ public class Bavard {
             System.out.println(bavard.getNom());
         }
     }
+
+    public void messageRecu(MessageEvent e) {
+        System.out.println("Hello World !");
+    }
+    
 
 }
