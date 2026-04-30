@@ -16,8 +16,8 @@ public class JeuDeTests {
         maxence.afficheAmis();
         System.out.println("Les amis de Sterenn sont :");
         sterenn.afficheAmis();
-        marie.envoyerMessage("Coucouuu !", 8);
-        
+        MessageEvent msg1 = marie.envoyerMessage("Coucouuu !", 8);
+        maxence.retransmettreMessage(msg1);
     }
 
 }

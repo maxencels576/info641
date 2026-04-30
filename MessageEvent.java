@@ -21,6 +21,9 @@ class MessageEvent extends EventObject {
     public ArrayList<String> getAuteurs() {
 		return auteur;
 	}
+    public String getPremierAuteur() {
+		return auteur.get(0);
+	}
     public String getDernierAuteur() {
         int n = auteur.size();
 		return auteur.get(n - 1);
