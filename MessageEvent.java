@@ -10,8 +10,7 @@ class MessageEvent extends EventObject {
 		super(source);
         this.contenu = contenu;
 		this.bienveillance = bienveillance;
-        this.auteur = new ArrayList<>();
-        // this.auteur.add(auteur);
+        this.auteur = new ArrayList<>(auteur);
 	}
     public String getContenu() {
 		return contenu;

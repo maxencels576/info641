@@ -38,7 +38,7 @@ public class Bavard implements MessageListener {
     }
 
     public void envoyerMessage(String contenu, int bienveillance) {
-        ArrayList<String> auteur;
+        ArrayList<String> auteur = new ArrayList<>();
         auteur.add(this.getNom());
         MessageEvent message = new MessageEvent(this, contenu, bienveillance, auteur);
         System.out.println("Message envoyé par " + nom + " (avec une bienveillance de " + bienveillance + ") : " + message.getContenu());
@@ -54,11 +54,15 @@ public class Bavard implements MessageListener {
     }
 
     // public void retransmettreMessage(MessageEvent message) {
-    //     MessageEvent message.getContenu() = ;
-    //     System.out.println("Message envoyé par " + nom + " (avec une bienveillance de " + bienveillance + ") : " + message.getContenu());
-    //     for (Bavard b : this.getListeAmis()) {
-    //         b.messageRecu(message);
+    //     if (message.getAuteurs().contains(this.getNom())) {
+    //         int new_bienveillance = message.getBienveillance();
+
+    //         String new_contenu = message.getContenu();
+    //         ArrayList<String> new_auteurs = message.getAuteurs();
+    //         new_auteurs.add(this.getNom());
+    //         MessageEvent new_message = new MessageEvent(this, new_contenu, new_bienveillance, new_auteurs);
     //     }
+        
     // }
 
 }
