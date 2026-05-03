@@ -53,8 +53,8 @@ public class Bavard implements MessageListener {
         System.out.println(this.getNom() + " : " + e.getDernierAuteur() + " vous a envoyé un message");
     }
 
-    public void retransmettreMessage(MessageEvent message){
-        if (message.getAuteurs().contains(this.getNom())){
+    public MessageEvent retransmettreMessage(MessageEvent message){
+        if (!message.getAuteurs().contains(this.getNom())){
             int new_bienveillance = message.getBienveillance();
             if ((this.perso.equals("Positive") || this.perso.equals("Positif")) && new_bienveillance < 10 ){
                 new_bienveillance += 1;
@@ -70,7 +70,15 @@ public class Bavard implements MessageListener {
             ArrayList<String> new_auteurs = message.getAuteurs();
             new_auteurs.add(this.getNom());
             MessageEvent new_message = new MessageEvent(this, new_contenu, new_bienveillance, new_auteurs);
-            System.out.println("Message de " + message.getPremierAuteur() + " retransmis par " + nom + " (avec une bienveillance de " + new_message.getBienveillance() + ") : " + message.getContenu());
+            System.out.println("Message de " + message.getPremierAuteur() + " retransmis par " + nom + " (avec une bienveillance de " + new_message.getBienveillance() + ") : " + new_message.getContenu());
+            for (Bavard b : this.getListeAmis()) {
+                b.messageRecu(message);
+            }
+            return new_message;
+        } else {
+            MessageEvent error = new MessageEvent(this.getNom(), "Error : J'ai déjà envoyé ce message", -1, message.getAuteurs());
+            System.out.println("Message de " + message.getPremierAuteur() + " retransmis par " + nom + " (avec une bienveillance de " + error.getBienveillance() + ") : " + error.getContenu());
+            return error;
         }
     
     }
