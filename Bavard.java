@@ -38,7 +38,7 @@ public class Bavard implements MessageListener {
         }
     }
     public void addMessageRecu(MessageEvent e) {
-        messagesRecus.add(e);                   
+        messagesRecus.add(e);               
     }                                            
     public void addRecuPar(String auteur) {
         recusPar.add(auteur);              
@@ -65,7 +65,7 @@ public class Bavard implements MessageListener {
         return message;
     }    
  
-    // @Override
+    @Override
     public void messageRecu(){
         System.out.println("\nMessage(s) reçu(s) par " + nom + " :");
         for (int i = 0; i < messagesRecus.size(); i++) {

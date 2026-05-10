@@ -26,6 +26,11 @@ public class JeuDeTests {
 
 
         System.out.println("");
+
+        new InterfaceBavard(marie);
+        new InterfaceBavard(maxence);
+        new InterfaceBavard(sterenn);
+
     }
 
 }
