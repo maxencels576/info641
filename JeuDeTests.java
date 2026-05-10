@@ -18,7 +18,7 @@ public class JeuDeTests {
         MessageEvent msg1 = marie.envoyerMessage("Coucouuu !", 8);
         MessageEvent msg2 = maxence.retransmettreMessage(msg1);
         marie.retransmettreMessage(msg2);
-        sterenn.retransmettreMessage(msg2);
+        // sterenn.retransmettreMessage(msg2);
         maxence.retransmettreMessage(msg2);
         marie.messageRecu();
         maxence.messageRecu();

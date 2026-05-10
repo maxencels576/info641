@@ -12,6 +12,9 @@ public class InterfaceBavard extends JFrame implements ActionListener{
     private JTextField champMessage = new JTextField("Contenu du message");
     private JTextField champBienveillance = new JTextField("Bienveillance (-10 à +10)");
     private JButton boutonEnvoyer = new JButton("Envoyer");
+    private JButton boutonRetransmettre = new JButton("Retransmettre");
+    private DefaultListModel<String> modelAmis = new DefaultListModel<>();
+    private JList<String> listeAmis = new JList<>(modelAmis);
 
     public InterfaceBavard(Bavard bavard){
         super();
@@ -22,25 +25,42 @@ public class InterfaceBavard extends JFrame implements ActionListener{
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        this.setLayout(new BorderLayout()); // organiser les composants
+        this.setLayout(new BorderLayout()); // organisation des éléments
 
-        JLabel titre = new JLabel("Messages reçus :");
-        titre.setHorizontalAlignment(JLabel.CENTER);
-        this.add(titre, BorderLayout.NORTH);
+        // Colonne de gauche : messages reçus
+        JPanel panelGauche = new JPanel(new BorderLayout());
+        JLabel titreMessages = new JLabel("Messages reçus :");
+        titreMessages.setHorizontalAlignment(JLabel.CENTER);
+        panelGauche.add(titreMessages, BorderLayout.NORTH);
+        panelGauche.add(new JScrollPane(listeMessages), BorderLayout.CENTER);
 
-        JScrollPane scroll = new JScrollPane(listeMessages); // barre de défilement
-        this.add(scroll, BorderLayout.CENTER);
+        // Colonne de droite : liste des amis
+        JPanel panelDroit = new JPanel(new BorderLayout());
+        JLabel titreAmis = new JLabel("Amis :");
+        titreAmis.setHorizontalAlignment(JLabel.CENTER);
+        panelDroit.add(titreAmis, BorderLayout.NORTH);
+        panelDroit.add(new JScrollPane(listeAmis), BorderLayout.CENTER);
 
-        JPanel panelBas = new JPanel(new GridLayout(1, 3));
+        // Panel central qui contient les deux colonnes
+        JPanel panelCentre = new JPanel(new GridLayout(1, 2));
+        panelCentre.add(panelGauche);
+        panelCentre.add(panelDroit);
+
+        this.add(panelCentre, BorderLayout.CENTER);
+
+        JPanel panelBas = new JPanel(new GridLayout(1, 4));
         panelBas.add(champMessage);
         panelBas.add(champBienveillance);
         panelBas.add(boutonEnvoyer);
+        panelBas.add(boutonRetransmettre);
 
         boutonEnvoyer.addActionListener(this);
+        boutonRetransmettre.addActionListener(this);
 
         this.add(panelBas, BorderLayout.SOUTH);
 
         rafraichirMessages();
+        rafraichirAmis();
 
         this.setVisible(true);
     }
@@ -56,6 +76,13 @@ public class InterfaceBavard extends JFrame implements ActionListener{
         }
     }
 
+    private void rafraichirAmis() {
+        modelAmis.clear();
+        for (Bavard ami : bavard.getListeAmis()) {
+            modelAmis.addElement(ami.getNom());
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == boutonEnvoyer) {
@@ -66,11 +93,18 @@ public class InterfaceBavard extends JFrame implements ActionListener{
                 champMessage.setText("");
                 champBienveillance.setText("");
                 rafraichirMessages();
-                // on affiche une nouvelle interface avec le nouveau message reçu
                 for (Bavard b : bavard.getListeAmis()) {
-                    // il faudrait fermer la 1ère interface ouverte pour le bavard b
                     new InterfaceBavard(b);
                 }
+            }
+        }
+        if (e.getSource() == boutonRetransmettre) {
+            int index = listeMessages.getSelectedIndex();
+            MessageEvent messageEvent = bavard.getMessagesRecus().get(index);
+            bavard.retransmettreMessage(messageEvent);
+            rafraichirMessages();
+            for (Bavard b : bavard.getListeAmis()) {
+                new InterfaceBavard(b);
             }
         }
     }
