@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.EventObject;
 
 class MessageEvent extends EventObject {
+
     private String contenu;
     private int bienveillance; // entre -10 et +10
     private ArrayList<String> auteur;
@@ -12,6 +13,7 @@ class MessageEvent extends EventObject {
 		this.bienveillance = bienveillance;
         this.auteur = new ArrayList<>(auteur);
 	}
+	
     public String getContenu() {
 		return contenu;
 	}

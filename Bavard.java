@@ -5,11 +5,15 @@ public class Bavard implements MessageListener {
     private String nom;
     private String perso;
     private ArrayList<Bavard> listeAmis;
+    private ArrayList<MessageEvent> messagesRecus;
+    private ArrayList<String> recusPar;           
 
     public Bavard(String nom, String perso){
         this.nom = nom;
         this.perso = perso;
         this.listeAmis = new ArrayList<>();
+        this.messagesRecus = new ArrayList<>();
+        this.recusPar = new ArrayList<>();     
     }
 
     public String getNom(){
@@ -21,19 +25,31 @@ public class Bavard implements MessageListener {
     public ArrayList<Bavard> getListeAmis(){
         return listeAmis;
     }
-
+    public ArrayList<MessageEvent> getMessagesRecus() {
+        return messagesRecus;                          
+    }                                                  
+    public ArrayList<String> getRecusPar() {
+        return recusPar;                    
+    }                                       
+    
     public void addAmi(Bavard bavard){
         if (listeAmis.contains(bavard) == false){
             this.listeAmis.add(bavard);
         }
     }
+    public void addMessageRecu(MessageEvent e) {
+        messagesRecus.add(e);                   
+    }                                            
+    public void addRecuPar(String auteur) {
+        recusPar.add(auteur);              
+    }                                      
 
     public void afficheBavard(){
         System.out.println(this.getNom() + " (" + this.getPerso() + ")");
     }
     public void afficheAmis(){
         for (Bavard bavard : this.getListeAmis()){
-            System.out.println("   - " + bavard.getNom());
+            System.out.println("  - " + bavard.getNom());
         }
     }
 
@@ -43,14 +59,19 @@ public class Bavard implements MessageListener {
         MessageEvent message = new MessageEvent(this, contenu, bienveillance, auteur);
         System.out.println("\nMessage envoyé par " + this.getNom() + " (avec une bienveillance de " + bienveillance + ") : " + message.getContenu());
         for (Bavard b : this.getListeAmis()) {
-            b.messageRecu(message);
+            b.addMessageRecu(message);
+            b.addRecuPar(this.getNom());
         }
         return message;
     }    
  
-    @Override
-    public void messageRecu(MessageEvent e){
-        System.out.println("    " + this.getNom() + " : " + e.getDernierAuteur() + " vous a envoyé un message");
+    // @Override
+    public void messageRecu(){
+        System.out.println("\nMessage(s) reçu(s) par " + nom + " :");
+        for (int i = 0; i < messagesRecus.size(); i++) {
+            System.out.println("Expéditeur : " + recusPar.get(i));
+            System.out.println("Message : " + messagesRecus.get(i).getContenu());
+        }
     }
 
     public MessageEvent retransmettreMessage(MessageEvent message){
@@ -72,7 +93,8 @@ public class Bavard implements MessageListener {
             MessageEvent new_message = new MessageEvent(this, new_contenu, new_bienveillance, new_auteurs);
             System.out.println("\nMessage de " + message.getPremierAuteur() + " retransmis par " + nom + " (avec une bienveillance de " + new_message.getBienveillance() + ") : " + new_message.getContenu());
             for (Bavard b : this.getListeAmis()) {
-                b.messageRecu(message);
+                b.addMessageRecu(new_message);
+                b.addRecuPar(this.getNom());
             }
             return new_message;
         } else {

@@ -20,9 +20,12 @@ public class JeuDeTests {
         marie.retransmettreMessage(msg2);
         sterenn.retransmettreMessage(msg2);
         maxence.retransmettreMessage(msg2);
+        marie.messageRecu();
+        maxence.messageRecu();
+        sterenn.messageRecu();
 
 
-         System.out.println("");
+        System.out.println("");
     }
 
 }
