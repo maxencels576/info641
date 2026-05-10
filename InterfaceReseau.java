@@ -13,6 +13,7 @@ public class InterfaceReseau extends JFrame implements ActionListener {
     private JButton creerBavard = new JButton("Créer Bavard");
     private JButton creerAmitie = new JButton("Créer amitié");
     private JButton interfaceBavard = new JButton("Afficher les interfaces des Bavards");
+    private JButton propagation = new JButton("Lancer une propagation");
 
     public InterfaceReseau() {
         super("Création du réseau de bavards");
@@ -46,14 +47,18 @@ public class InterfaceReseau extends JFrame implements ActionListener {
 
         this.add(panelCentre, BorderLayout.CENTER);
 
+        JPanel panelBas = new JPanel(new GridLayout(1, 3));
         // Créer une amitié
-        JPanel panelBas = new JPanel(new GridLayout(1, 2));
         panelBas.add(creerAmitie);
         creerAmitie.addActionListener(this);
 
         // Lancer les interfaces bavards
         panelBas.add(interfaceBavard);
         interfaceBavard.addActionListener(this);
+
+        // Lancer une propagation
+        panelBas.add(propagation);
+        propagation.addActionListener(this);
 
         this.add(panelBas, BorderLayout.SOUTH);
 
@@ -89,6 +94,15 @@ public class InterfaceReseau extends JFrame implements ActionListener {
         if (e.getSource() == interfaceBavard) {
             for (Bavard b : reseau) {
                 new InterfaceBavard(b);
+            }
+        }
+        // Lancer une propagation
+        if (e.getSource() == propagation) {
+            for (Bavard b : reseau) {
+                ArrayList<MessageEvent> messages = b.getMessagesRecus();
+                for (MessageEvent message : messages) {
+                    b.retransmettreMessage(message);
+                }
             }
         }
     }
