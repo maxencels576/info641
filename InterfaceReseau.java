@@ -10,9 +10,9 @@ public class InterfaceReseau extends JFrame implements ActionListener {
     private JList<String> listeBavards = new JList<>(modelBavards);
     private JTextField champNom = new JTextField("Nom du bavard");
     private JTextField champPerso = new JTextField("Personnalité");
-    private JButton boutonCreer = new JButton("Créer Bavard");
-    // private JButton etreAmi = new JButton("veut être ami");
-    // private JButton amiAvec = new JButton("avec");
+    private JButton creerBavard = new JButton("Créer Bavard");
+    private JButton creerAmitie = new JButton("Créer amitié");
+    private JButton interfaceBavard = new JButton("Afficher les interfaces des Bavards");
 
     public InterfaceReseau() {
         super("Création du réseau de bavards");
@@ -26,9 +26,11 @@ public class InterfaceReseau extends JFrame implements ActionListener {
         JPanel panelHaut = new JPanel(new GridLayout(1, 3));
         panelHaut.add(champNom);
         panelHaut.add(champPerso);
-        panelHaut.add(boutonCreer);
+        panelHaut.add(creerBavard);
+        panelHaut.add(creerAmitie);
 
-        boutonCreer.addActionListener(this);
+        creerBavard.addActionListener(this);
+        creerAmitie.addActionListener(this);
 
         this.add(panelHaut, BorderLayout.NORTH);
 
@@ -38,20 +40,22 @@ public class InterfaceReseau extends JFrame implements ActionListener {
         titre.setHorizontalAlignment(JLabel.CENTER);
         panelCentre.add(titre, BorderLayout.NORTH);
 
+        listeBavards.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         JScrollPane scroll = new JScrollPane(listeBavards);
         panelCentre.add(scroll, BorderLayout.CENTER);
 
         this.add(panelCentre, BorderLayout.CENTER);
 
-        // Ajouter une amitié entre deux bavards
-        // JPanel panelBas = new JPanel(new GridLayout(1, 3));
-        // panelBas.add(etreAmi);
-        // panelBas.add(amiAvec);
+        // Créer une amitié
+        JPanel panelBas = new JPanel(new GridLayout(1, 2));
+        panelBas.add(creerAmitie);
+        creerAmitie.addActionListener(this);
 
-        // etreAmi.addActionListener(this);
-        // amiAvec.addActionListener(this);
+        // Lancer les interfaces bavards
+        panelBas.add(interfaceBavard);
+        interfaceBavard.addActionListener(this);
 
-        // this.add(panelBas, BorderLayout.SOUTH);
+        this.add(panelBas, BorderLayout.SOUTH);
 
         this.setVisible(true);
     }
@@ -59,7 +63,7 @@ public class InterfaceReseau extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         // Création d'un bavard
-        if (e.getSource() == boutonCreer) {
+        if (e.getSource() == creerBavard) {
             String nom = champNom.getText();
             String perso = champPerso.getText();
             if (!nom.isEmpty() && !perso.isEmpty()) {
@@ -68,20 +72,24 @@ public class InterfaceReseau extends JFrame implements ActionListener {
                 modelBavards.addElement(b.getNom() + " (" + b.getPerso() + ")");
             }
         }
-        // Ajout d'une amitié 
-        // if (e.getSource() == etreAmi) {
-        //     int i = listeBavards.getSelectedIndex();
-        //     if (e.getSource() == amiAvec) {
-        //         int j = listeBavards.getSelectedIndex();
-        //         if (i != j) {
-        //             Bavard b1 = reseau.get(i);
-        //             Bavard b2 = reseau.get(j);
-        //             b1.addAmi(b2);
-        //             // b2.addAmi(b1);
-        //             System.out.println(b1.getNom() + " est maintenant ami avec " + b2.getNom());
-        //         }
-        //     }
-        // }
-        
+        // Création d'une amitié
+        if (e.getSource() == creerAmitie) {
+            int[] indices = listeBavards.getSelectedIndices();
+            if (indices.length == 2) {
+                Bavard b1 = reseau.get(indices[0]);
+                Bavard b2 = reseau.get(indices[1]);
+                b1.addAmi(b2);
+                b2.addAmi(b1);
+                JOptionPane.showMessageDialog(this, b1.getNom() + " et " + b2.getNom() + " sont ami(e)s");
+            } else {
+                JOptionPane.showMessageDialog(this, "Sélectionnez exactement deux bavards !");
+            }
+        }
+        // Afficher les interfaces des bavards
+        if (e.getSource() == interfaceBavard) {
+            for (Bavard b : reseau) {
+                new InterfaceBavard(b);
+            }
+        }
     }
 }
