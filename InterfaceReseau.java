@@ -102,6 +102,9 @@ public class InterfaceReseau extends JFrame implements ActionListener {
                 ArrayList<MessageEvent> messages = b.getMessagesRecus();
                 for (MessageEvent message : messages) {
                     b.retransmettreMessage(message);
+                    for (Bavard ami : b.getListeAmis()) {
+                        new InterfaceBavard(ami);
+                    }
                 }
             }
         }
