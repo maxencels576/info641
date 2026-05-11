@@ -23,7 +23,7 @@ public class InterfaceBavard extends JFrame implements ActionListener{
         this.setTitle("Interface de " + bavard.getNom());
         this.setSize(600, 400);
         this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
         this.setLayout(new BorderLayout()); // organisation des éléments
 
@@ -61,7 +61,7 @@ public class InterfaceBavard extends JFrame implements ActionListener{
 
         rafraichirMessages();
         rafraichirAmis();
-
+        
         this.setVisible(true);
     }
 
@@ -80,7 +80,13 @@ public class InterfaceBavard extends JFrame implements ActionListener{
         modelAmis.clear();
         for (Bavard ami : bavard.getListeAmis()) {
             modelAmis.addElement(ami.getNom());
+            this.revalidate();
+            this.repaint();
         }
+    }
+
+    public Bavard getBavard() {
+        return bavard;
     }
 
     @Override
@@ -94,9 +100,19 @@ public class InterfaceBavard extends JFrame implements ActionListener{
                 champBienveillance.setText("");
                 rafraichirMessages();
                 for (Bavard b : bavard.getListeAmis()) {
+                    for (java.awt.Window window : java.awt.Window.getWindows()) {
+                        if (window instanceof InterfaceBavard) {
+                            InterfaceBavard inter = (InterfaceBavard) window;
+                            if (inter.bavard.equals(b)) {
+                                inter.dispose();
+                            }
+                        }
+                    }
                     new InterfaceBavard(b);
                 }
             }
+            this.revalidate();
+		    this.repaint();
         }
         if (e.getSource() == boutonRetransmettre) {
             int index = listeMessages.getSelectedIndex();
@@ -104,7 +120,15 @@ public class InterfaceBavard extends JFrame implements ActionListener{
             bavard.retransmettreMessage(messageEvent);
             rafraichirMessages();
             for (Bavard b : bavard.getListeAmis()) {
-                new InterfaceBavard(b);
+                for (java.awt.Window window : java.awt.Window.getWindows()) {
+                        if (window instanceof InterfaceBavard) {
+                            InterfaceBavard inter = (InterfaceBavard) window;
+                            if (inter.bavard.equals(b)) {
+                                inter.dispose();
+                            }
+                        }
+                    }
+                    new InterfaceBavard(b);
             }
         }
     }

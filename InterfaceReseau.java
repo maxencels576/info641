@@ -19,7 +19,7 @@ public class InterfaceReseau extends JFrame implements ActionListener {
         super("Création du réseau de bavards");
         this.setSize(600, 400);
         this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         
         this.setLayout(new BorderLayout());
 
@@ -61,10 +61,11 @@ public class InterfaceReseau extends JFrame implements ActionListener {
         propagation.addActionListener(this);
 
         this.add(panelBas, BorderLayout.SOUTH);
-
+        this.revalidate();
+		this.repaint();
         this.setVisible(true);
     }
-
+        
     @Override
     public void actionPerformed(ActionEvent e) {
         // Création d'un bavard
@@ -84,8 +85,7 @@ public class InterfaceReseau extends JFrame implements ActionListener {
                 Bavard b1 = reseau.get(indices[0]);
                 Bavard b2 = reseau.get(indices[1]);
                 b1.addAmi(b2);
-                b2.addAmi(b1);
-                JOptionPane.showMessageDialog(this, b1.getNom() + " et " + b2.getNom() + " sont ami(e)s");
+                JOptionPane.showMessageDialog(this, b2.getNom() + " est l'ami de " + b1.getNom());
             } else {
                 JOptionPane.showMessageDialog(this, "Sélectionnez exactement deux bavards !");
             }
@@ -93,7 +93,15 @@ public class InterfaceReseau extends JFrame implements ActionListener {
         // Afficher les interfaces des bavards
         if (e.getSource() == interfaceBavard) {
             for (Bavard b : reseau) {
-                new InterfaceBavard(b);
+                for (java.awt.Window window : java.awt.Window.getWindows()) {
+                        if (window instanceof InterfaceBavard) {
+                            InterfaceBavard inter = (InterfaceBavard) window;
+                            if (inter.getBavard().equals(b)) {
+                                inter.dispose();
+                            }
+                        }
+                    }
+                    new InterfaceBavard(b);
             }
         }
         // Lancer une propagation
@@ -103,7 +111,15 @@ public class InterfaceReseau extends JFrame implements ActionListener {
                 for (MessageEvent message : messages) {
                     b.retransmettreMessage(message);
                     for (Bavard ami : b.getListeAmis()) {
-                        new InterfaceBavard(ami);
+                        for (java.awt.Window window : java.awt.Window.getWindows()) {
+                        if (window instanceof InterfaceBavard) {
+                            InterfaceBavard inter = (InterfaceBavard) window;
+                            if (inter.getBavard().equals(b)) {
+                                inter.dispose();
+                            }
+                        }
+                    }
+                    new InterfaceBavard(b);
                     }
                 }
             }
