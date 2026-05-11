@@ -60,18 +60,14 @@ public class Bavard implements MessageListener {
         System.out.println("\nMessage envoyé par " + this.getNom() + " (avec une bienveillance de " + bienveillance + ") : " + message.getContenu());
         for (Bavard b : this.getListeAmis()) {
             b.addMessageRecu(message);
-            b.addRecuPar(this.getNom());
+            b.messageRecu(message);
         }
         return message;
     }    
  
     @Override
-    public void messageRecu(){
-        System.out.println("\nMessage(s) reçu(s) par " + nom + " :");
-        for (int i = 0; i < messagesRecus.size(); i++) {
-            System.out.println("Expéditeur : " + recusPar.get(i));
-            System.out.println("Message : " + messagesRecus.get(i).getContenu());
-        }
+    public void messageRecu(MessageEvent e) {
+        System.out.println("  " + this.getNom() + " : " + e.getDernierAuteur() + " m'a envoyé un message : " + this.getMessagesRecus().get(this.getMessagesRecus().size() - 1).getContenu() + " (bienveillance : " + e.getBienveillance() + ")");
     }
 
     public MessageEvent retransmettreMessage(MessageEvent message){
@@ -88,13 +84,13 @@ public class Bavard implements MessageListener {
             } else if ((this.perso.equals("Négative") || this.perso.equals("Négatif"))){
                 new_contenu += " :-(";
             }
-            ArrayList<String> new_auteurs = message.getAuteurs();
+            ArrayList<String> new_auteurs = new ArrayList<>(message.getAuteurs());
             new_auteurs.add(this.getNom());
             MessageEvent new_message = new MessageEvent(this, new_contenu, new_bienveillance, new_auteurs);
             System.out.println("\nMessage de " + message.getPremierAuteur() + " retransmis par " + nom + " (avec une bienveillance de " + new_message.getBienveillance() + ") : " + new_message.getContenu());
             for (Bavard b : this.getListeAmis()) {
                 b.addMessageRecu(new_message);
-                b.addRecuPar(this.getNom());
+                b.messageRecu(new_message);
             }
             return new_message;
         } else {

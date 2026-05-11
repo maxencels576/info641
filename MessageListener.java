@@ -1,3 +1,3 @@
 interface MessageListener {
-    void messageRecu();
+    void messageRecu(MessageEvent e);
 }

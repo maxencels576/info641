@@ -85,7 +85,8 @@ public class InterfaceReseau extends JFrame implements ActionListener {
                 Bavard b1 = reseau.get(indices[0]);
                 Bavard b2 = reseau.get(indices[1]);
                 b1.addAmi(b2);
-                JOptionPane.showMessageDialog(this, b2.getNom() + " est l'ami de " + b1.getNom());
+                b2.addAmi(b1);
+                JOptionPane.showMessageDialog(this, b2.getNom() + " est l'ami(e) de " + b1.getNom());
             } else {
                 JOptionPane.showMessageDialog(this, "Sélectionnez exactement deux bavards !");
             }
@@ -114,12 +115,12 @@ public class InterfaceReseau extends JFrame implements ActionListener {
                         for (java.awt.Window window : java.awt.Window.getWindows()) {
                         if (window instanceof InterfaceBavard) {
                             InterfaceBavard inter = (InterfaceBavard) window;
-                            if (inter.getBavard().equals(b)) {
+                            if (inter.getBavard().equals(ami)) {
                                 inter.dispose();
                             }
                         }
                     }
-                    new InterfaceBavard(b);
+                    new InterfaceBavard(ami);
                     }
                 }
             }
